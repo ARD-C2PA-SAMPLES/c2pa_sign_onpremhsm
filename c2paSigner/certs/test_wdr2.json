@@ -1,0 +1,152 @@
+{
+    "alg": "es256",
+    "sign_cert": "wdr_certs.pem",
+    "ta_url": "http://timestamp.digicert.com",
+    "claim_generator": "IBC-Demo-Signer",
+    "claim_generator_info": [
+        {
+            "name": "IBC-Demo-Signer",
+            "version": "1.0",
+            "icon": {
+                "format": "image/png",
+                "identifier": "wdr_icon.png"
+            }
+        }
+    ],
+    "thumbnail": {
+        "format": "image/png",
+        "identifier": "wdr_icon.png"
+    },
+    "assertions": [
+        {
+            "label": "stds.schema-org.CreativeWork",
+            "data": {
+                "@context": "https://schema.org",
+                "@type": "CreativeWork",
+                "url": "https://www.ibc.org/",
+                "author": [
+                    {
+                        "@type": "Person",
+                        "name": "Kenneth (WDR)"
+                    },
+                    {
+                        "@id": "https://de.linkedin.com/in/kenneth-warmuth-05a878209",
+                        "@type": "Person",
+                        "name": "Kenneth",
+                        "url": "https://de.linkedin.com/in/kenneth-warmuth-05a878209"
+                    },
+                    {
+                        "@id": "https://de.linkedin.com/company/wdr",
+                        "@type": "Organization",
+                        "name": "WDR",
+                        "url": "https://de.linkedin.com/company/wdr"
+                    }
+                ],
+                "creator": [
+                    {
+                        "@type": "Organization",
+                        "name": "WDR"
+                    }
+                ],
+                "dateCreated": [
+                    {
+                        "@type": "DateTime",
+                        "value": "2024-09-11T04:00:00Z"
+                    }
+                ],
+                "datePublished": [
+                    {
+                        "@type": "DateTime",
+                        "value": "2024-09-12T02:03:00Z"
+                    }
+                ],
+                "editor": [
+                    {
+                        "@type": "Person",
+                        "name": "Editor WDR"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "c2pa.actions",
+            "data": {
+                "actions": [
+                    {
+                        "action": "c2pa.opened"
+                    },
+                    {
+                        "action": "c2pa.color_adjustments",
+                        "parameters": {
+                            "name": "brightnesscontrast"
+                        }
+                    },
+                    {
+                        "action": "c2pa.placed"
+                    },
+                    {
+                        "action": "c2pa.resized"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "stds.exif",
+            "data": {
+                "@context": {
+                    "EXIF": "http://ns.adobe.com/EXIF/1.0/",
+                    "EXIFEX": "http://cipa.jp/EXIF/2.32/",
+                    "dc": "http://purl.org/dc/elements/1.1/",
+                    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                    "tiff": "http://ns.adobe.com/tiff/1.0/",
+                    "xmp": "http://ns.adobe.com/xap/1.0/"
+                },
+                "EXIF:GPSAltitude": "123.5",
+                "EXIF:GPSHorizontalAccuracy": "16.4",
+                "EXIF:GPSLatitude": "52.34120368175047",
+                "EXIF:GPSLongitude": "4.888583410815299",
+                "EXIF:GPSTimeStamp": "2024-09-11T15:41:40Z"
+            }
+        },
+        {
+            "label": "de.wdr.custom",
+            "data": {
+                "organization": "Westdeutsche Rundfunk ",
+                "platform": "My Platform",
+                "news": [
+                    {
+                        "info": " Comment, claims...",
+                        "person": "Journalist",
+                        "time": "Time",
+                        "location": "Location"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "stds.schema-org.ClaimReview",
+            "data": {
+                "@context": "http://schema.org",
+                "@type": "ClaimReview",
+                "author": {
+                    "@type": "Organization",
+                    "name": "WDR"
+                },
+                "claimReviewed": "Claim review",
+                "datePublished": "Here Date",
+                "itemReviewed": {
+                    "@type": "ImageObject",
+                    "caption": "What video"
+                },
+                "reviewBody": "My review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "alternateName": "Verified",
+                    "bestRating": "5",
+                    "ratingValue": "5",
+                    "worstRating": "1"
+                }
+            }
+        }
+    ]
+}
