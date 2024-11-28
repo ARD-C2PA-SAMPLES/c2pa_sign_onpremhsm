@@ -2,3 +2,6 @@
 /c2paSigner/bin
 /c2paSigner/obj
 /hsm_signer/obj
+.DS_Store
+**/.DS_Store
+/.vscode

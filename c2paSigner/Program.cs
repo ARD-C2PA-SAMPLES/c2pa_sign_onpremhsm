@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections;
 
+using Mono.Unix;
+
 bool killme = false;
 
 var PATHWATCH = "/media/";
@@ -17,14 +19,34 @@ catch
 {
 }
 
+string previous_message = "";
 
 Console.WriteLine("PATHWATCH " + PATHWATCH);
 
+void inform(string msg)
+{
+    if (msg == previous_message) return;
+    Console.WriteLine(msg);
+    string html = File.ReadAllText("html_status/template.html");
+    html = html.Replace("@info@", msg);
+    File.WriteAllText("html_status/_status.html", html);
+    
+    var fileInfo = new UnixFileInfo("html_status/_status.html");
 
+    // Set owner and group
+    fileInfo.SetOwner("ubuntu", "ubuntu");
+
+    // Set permissions
+    fileInfo.FileAccessPermissions = FileAccessPermissions.UserRead | FileAccessPermissions.UserWrite;
+
+    
+    File.Move("html_status/_status.html", "html_status/status.html", true);
+    previous_message = msg;
+}
 
 void Fs_watch()
 {
-    string html = "";
+
     try
     {
         DirectoryInfo dirlist = new DirectoryInfo(PATHWATCH);
@@ -33,11 +55,7 @@ void Fs_watch()
             if ((!file.FullName.Contains("_signed")) && (!File.Exists(file.FullName.Replace(".JPG", "_signed.JPG"))))
             {
                 //inform - html-change
-                html = File.ReadAllText("html_status/template.html");
-                html = html.Replace("@info@", "do not eject<br> signing " + file.Name);
-                File.WriteAllText("html_status/status.html", html);
-                File.SetUnixFileMode("html_status/status.html", UnixFileMode.UserRead | UnixFileMode.UserWrite);
-
+                inform("do not eject<br> signing " + file.Name);
 
                 processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(".JPG", "_signed.JPG"));
                 runc2pa.runSign(file.FullName.Replace(".JPG", "_signed.JPG"));
@@ -47,11 +65,7 @@ void Fs_watch()
     }
     catch (System.Exception e) { Console.WriteLine(e.Message); }
     //inform - html-change
-    html = File.ReadAllText("html_status/template.html");
-    html = html.Replace("@info@", "all done<br>you can remove card");
-    File.WriteAllText("html_status/status.html", html);
-    File.SetUnixFileMode("html_status/status.html", UnixFileMode.UserRead | UnixFileMode.UserWrite);
-
+    inform("all done<br>you can remove card");
 }
 
 
@@ -61,7 +75,3 @@ while (killme == false)
     Fs_watch();
     Thread.Sleep(1000);
 }
-
-
-
-
