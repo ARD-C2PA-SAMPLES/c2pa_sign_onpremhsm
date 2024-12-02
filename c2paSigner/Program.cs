@@ -43,22 +43,22 @@ void inform(string msg)
     File.Move("html_status/_status.html", "html_status/status.html", true);
     previous_message = msg;
 }
-
-void Fs_watch()
+//*.JPG
+void Fs_watch(string extension)
 {
 
     try
     {
         DirectoryInfo dirlist = new DirectoryInfo(PATHWATCH);
-        foreach (FileInfo file in dirlist.GetFiles("*.JPG", SearchOption.AllDirectories))
+        foreach (FileInfo file in dirlist.GetFiles("*" + extension, SearchOption.AllDirectories))
         {
-            if ((!file.FullName.Contains("_signed")) && (!File.Exists(file.FullName.Replace(".JPG", "_signed.JPG"))))
+            if ((!file.FullName.Contains("_signed")) && (!File.Exists(file.FullName.Replace(extension, "_signed" + extension))))
             {
                 //inform - html-change
                 inform("do not eject<br> signing " + file.Name);
 
-                processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(".JPG", "_signed.JPG"));
-                runc2pa.runSign(file.FullName.Replace(".JPG", "_signed.JPG"));
+                processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(extension, "_signed" + extension));
+                runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
 
             }
         }
@@ -72,6 +72,7 @@ void Fs_watch()
 
 while (killme == false)
 {
-    Fs_watch();
+    Fs_watch(".JPG");
+    Fs_watch(".MP4");
     Thread.Sleep(1000);
 }
