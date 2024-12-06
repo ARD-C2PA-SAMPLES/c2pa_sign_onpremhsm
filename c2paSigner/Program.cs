@@ -1,11 +1,13 @@
 // See https://aka.ms/new-console-template for more information
-using c2panalyze2;
-using System.Text.Json;
+using c2panalyze;
 using System.Diagnostics;
-using System.IO;
-using System.Collections;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Metadata;
+using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+using SixLabors.ImageSharp.Metadata.Profiles.Iptc;
 
 using Mono.Unix;
+using SixLabors.ImageSharp.Processing;
 
 bool killme = false;
 
@@ -54,11 +56,27 @@ void Fs_watch(string extension)
         {
             if ((!file.FullName.Contains("_signed")) && (!File.Exists(file.FullName.Replace(extension, "_signed" + extension))))
             {
-                //inform - html-change
-                inform("do not eject<br> signing " + file.Name);
+                if(extension == ".JPG")
+                {
+                    resizeImage(file.FullName);
+                    //inform - html-change
+                    inform("do not eject<br> signing " + file.Name);
 
-                processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(extension, "_signed" + extension));
-                runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
+                    processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(extension, "_signed" + extension));
+                    runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
+                }
+                else
+                {
+                    File.Copy("certs/thumbnail.jpg", file.FullName.Replace(extension, "_signed" + extension));
+                    //inform - html-change
+                    inform("do not eject<br> signing " + file.Name);
+
+                    processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(extension, "_signed" + extension));
+                    runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
+                }
+                
+
+                
 
             }
         }
@@ -68,7 +86,58 @@ void Fs_watch(string extension)
     inform("all done<br>you can remove card");
 }
 
+string resizeImage(string filename)
+{
+    using (Image image = Image.Load(filename))
+        {
+            // Resize the image
+            image.Mutate(x => x.Resize(new ResizeOptions
+            {
+                Size = new Size(400, 300), // Set the desired dimensions
+                Mode = ResizeMode.Max     // Preserve aspect ratio
+            }));
 
+            // Save the image as JPEG with quality settings
+            image.Save(Path.Combine(Directory.GetCurrentDirectory(),"certs","thumbnail.jpg"), new JpegEncoder
+            {
+                Quality = 85 // Set JPEG quality (1-100)
+            });
+
+
+            // Access metadata
+            ImageMetadata metadata = image.Metadata;
+
+            // Extract EXIF data
+            if (metadata.ExifProfile != null)
+            {
+                Console.WriteLine("EXIF Data:");
+                foreach (var exifValue in metadata.ExifProfile.Values)
+                {
+                    Console.WriteLine($"{exifValue.Tag}: {exifValue.GetValue()}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No EXIF data found.");
+            }
+
+            // Extract IPTC data
+            if (metadata.IptcProfile != null)
+            {
+                Console.WriteLine("\nIPTC Data:");
+                foreach (var iptcValue in metadata.IptcProfile.Values)
+                {
+                    Console.WriteLine($"{iptcValue.Tag}: {iptcValue.Value}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No IPTC data found.");
+            }
+        }
+
+    return "s";
+}
 
 while (killme == false)
 {

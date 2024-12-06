@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Numerics;
 using System.Runtime.ConstrainedExecution;
 
-namespace c2panalyze2
+namespace c2panalyze
 {
 
     public class certchainelement
