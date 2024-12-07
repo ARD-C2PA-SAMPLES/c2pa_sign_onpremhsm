@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="UImobile_c2paSigner.MainWindow"
+        x:CompileBindings="False"
+        Title="UImobile_c2paSigner" WindowState="Maximized" Topmost="true" SystemDecorations="None">
+  <StackPanel>
+  <TextBlock Margin="20" xml:space="preserve" FontFamily="Consolas" HorizontalAlignment="Stretch" FontSize="50" TextAlignment="Center" Foreground="Black" Text="{Binding MessageUpdate}" />
+  <Panel>
+    <Rectangle Height="300" Width="300" Fill="LightGray"/>
+    <Image Margin="20" Height="200" Width="200"
+           Source="{Binding ImageUpdate}"/>
+  </Panel>
+  </StackPanel>
+</Window>

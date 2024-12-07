@@ -5,11 +5,18 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux_arm64</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
 
   </PropertyGroup>
 
+  <Target Name="CopyDataFiles" AfterTargets="Build">
+    <ItemGroup>
+      <DataFiles Include="$(TargetDir)\*.*"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(SolutionDir)\c2paSigner\c2pa\" SkipUnchangedFiles="true"/>
+  </Target>
 
 
 </Project>

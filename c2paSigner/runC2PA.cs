@@ -10,9 +10,11 @@ using System.Text.Json;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.ConstrainedExecution;
+using System.IO;
+using System.Collections;
 
-namespace c2panalyze
-{
+namespace UImobile_c2paSigner;
+
 
     public class certchainelement
     {
@@ -261,4 +263,4 @@ namespace c2panalyze
             }
         }
     }
-}
+
