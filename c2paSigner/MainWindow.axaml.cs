@@ -24,21 +24,21 @@ namespace UImobile_c2paSigner
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-    string message;
+        string message;
 
         Bitmap imageData;
-    
-    bool killme = false;
 
-	string PATHWATCH = "/media/";
 
-	string previous_message = "";
-	
-    public string MessageUpdate 
-    { 
-        get { return message; }
-        set { NotifyPropertyChanged(); }
-    }
+        //string PATHWATCH = "/Users/martingrohme/Downloads/test/";
+        string PATHWATCH = "/media/";
+
+        string previous_message = "";
+
+        public string MessageUpdate
+        {
+            get { return message; }
+            set { NotifyPropertyChanged(); }
+        }
 
         public Bitmap ImageUpdate
         {
@@ -48,12 +48,12 @@ namespace UImobile_c2paSigner
 
         public MainWindow()
         {
-                message = "";
+            message = "";
             imageData = new Bitmap("certs/wdr_icon.png");
-                InitializeComponent();
-                DataContext = this;
-                var t = new Thread(new ThreadStart(async () => await UpdateGUI()));
-                t.Start();
+            InitializeComponent();
+            DataContext = this;
+            var t = new Thread(new ThreadStart(async () => await UpdateGUI()));
+            t.Start();
         }
 
         private async Task UpdateGUI()
@@ -76,24 +76,31 @@ namespace UImobile_c2paSigner
                 DirectoryInfo dirlist = new DirectoryInfo(PATHWATCH);
                 foreach (FileInfo file in dirlist.GetFiles("*" + extension, SearchOption.AllDirectories))
                 {
-                    if ((!file.FullName.Contains("_signed")) && (!File.Exists(file.FullName.Replace(extension, "_signed" + extension))))
+                    if (!file.Name.Contains("_signed"))
                     {
-                        //inform - html-change
-                        inform("do not eject\r\nsigning " + file.Name);
-
-                        if (extension == ".JPG")
+                        if (!File.Exists(file.FullName.Replace(extension, "_signed" + extension)))
                         {
-                            resizeImage(file.FullName);
-                        }
-                        else
-                        {
-                            File.Copy("certs/save_wdr_icon.png", "certs/wdr_icon.png");
-                        }
+                            
 
-                        processC2PA runc2pa = new processC2PA(file.FullName, file.FullName.Replace(extension, "_signed" + extension));
-                        runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
+                            if (extension == ".JPG")
+                            {
+                                resizeImage(file.FullName);
+                            }
+                            else
+                            {
+                                File.Copy("certs/save_wdr_icon.png", "certs/wdr_icon.png", true);
+                            }
+                            
+                            //inform - html-change
+                            inform("do not eject\r\nsigning " + file.Name);
+
+                            processC2PA runc2pa = new processC2PA(file.FullName);
+                            runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
+
+                        }
 
                     }
+
                 }
             }
             catch (System.Exception e) { Console.WriteLine(e.Message); }
@@ -114,7 +121,7 @@ namespace UImobile_c2paSigner
 
                 // Save the image as JPEG with quality settings
                 image.Save(Path.Combine(Directory.GetCurrentDirectory(), "certs", "wdr_icon.png"), new PngEncoder
-                {});
+                { });
 
 
                 // Access metadata

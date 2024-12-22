@@ -4,3 +4,4 @@
 /c2paSigner/obj
 c2paSigner/c2pa/hsm_signer.exe
 /c2paSigner/bin
+/.vs
