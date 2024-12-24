@@ -28,11 +28,13 @@ namespace UImobile_c2paSigner
 
         Bitmap imageData;
 
+        static Thread t;
 
-        //string PATHWATCH = "/Users/martingrohme/Downloads/test/";
+
+        //string PATHWATCH = "/Users/coadmin/Downloads/test/";
         string PATHWATCH = "/media/";
 
-        string previous_message = "";
+        //string previous_message = "";
 
         public string MessageUpdate
         {
@@ -51,8 +53,14 @@ namespace UImobile_c2paSigner
             message = "";
             imageData = new Bitmap("certs/wdr_icon.png");
             InitializeComponent();
+            Loaded += MainWindow_Loaded;    
             DataContext = this;
-            var t = new Thread(new ThreadStart(async () => await UpdateGUI()));
+            
+        }
+
+        private void MainWindow_Loaded(object sender, System.EventArgs e)
+        {
+            t = new Thread(new ThreadStart(async () => await UpdateGUI()));
             t.Start();
         }
 
@@ -63,6 +71,9 @@ namespace UImobile_c2paSigner
                 Fs_watch(".JPG");
                 Fs_watch(".MP4");
                 await Task.Delay(1000);
+                //inform - UI-change
+                inform("all done\r\nyou can remove card");
+                Console.WriteLine("check");
             }
         }
 
@@ -80,7 +91,7 @@ namespace UImobile_c2paSigner
                     {
                         if (!File.Exists(file.FullName.Replace(extension, "_signed" + extension)))
                         {
-                            
+
 
                             if (extension == ".JPG")
                             {
@@ -90,7 +101,7 @@ namespace UImobile_c2paSigner
                             {
                                 File.Copy("certs/save_wdr_icon.png", "certs/wdr_icon.png", true);
                             }
-                            
+
                             //inform - html-change
                             inform("do not eject\r\nsigning " + file.Name);
 
@@ -103,9 +114,11 @@ namespace UImobile_c2paSigner
 
                 }
             }
-            catch (System.Exception e) { Console.WriteLine(e.Message); }
-            //inform - UI-change
-            inform("all done\r\nyou can remove card");
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
         string resizeImage(string filename)
@@ -121,39 +134,48 @@ namespace UImobile_c2paSigner
 
                 // Save the image as JPEG with quality settings
                 image.Save(Path.Combine(Directory.GetCurrentDirectory(), "certs", "wdr_icon.png"), new PngEncoder
-                { });
-
-
-                // Access metadata
-                ImageMetadata metadata = image.Metadata;
-
-                // Extract EXIF data
-                if (metadata.ExifProfile != null)
                 {
-                    Console.WriteLine("EXIF Data:");
-                    foreach (var exifValue in metadata.ExifProfile.Values)
+                    CompressionLevel = PngCompressionLevel.BestCompression, // Highest compression
+                    ColorType = PngColorType.RgbWithAlpha,
+
+                });
+
+
+                try
+                {
+                    // Access metadata
+                    ImageMetadata metadata = image.Metadata;
+
+                    // Extract EXIF data
+                    if (metadata.ExifProfile != null)
                     {
-                        Console.WriteLine($"{exifValue.Tag}: {exifValue.GetValue()}");
+                        Console.WriteLine("EXIF Data:");
+                        foreach (var exifValue in metadata.ExifProfile.Values)
+                        {
+                            Console.WriteLine($"{exifValue.Tag}: {exifValue.GetValue()}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No EXIF data found.");
+                    }
+
+                    // Extract IPTC data
+                    if (metadata.IptcProfile != null)
+                    {
+                        Console.WriteLine("\nIPTC Data:");
+                        foreach (var iptcValue in metadata.IptcProfile.Values)
+                        {
+                            Console.WriteLine($"{iptcValue.Tag}: {iptcValue.Value}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No IPTC data found.");
                     }
                 }
-                else
-                {
-                    Console.WriteLine("No EXIF data found.");
-                }
+                catch (Exception e) { Console.WriteLine(e.Message); }
 
-                // Extract IPTC data
-                if (metadata.IptcProfile != null)
-                {
-                    Console.WriteLine("\nIPTC Data:");
-                    foreach (var iptcValue in metadata.IptcProfile.Values)
-                    {
-                        Console.WriteLine($"{iptcValue.Tag}: {iptcValue.Value}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No IPTC data found.");
-                }
             }
 
             return "s";
@@ -161,13 +183,13 @@ namespace UImobile_c2paSigner
 
         void inform(string msg)
         {
-            if (msg == previous_message) return;
-            Console.WriteLine(msg);
+            //Console.WriteLine(msg);
+            //if (msg == previous_message) return;
             MessageUpdate = string.Empty;
             ImageUpdate = new Bitmap("certs/wdr_icon.png");
             imageData = new Bitmap("certs/wdr_icon.png");
             message = msg;
-            previous_message = msg;
+            //previous_message = msg;
         }
 
 

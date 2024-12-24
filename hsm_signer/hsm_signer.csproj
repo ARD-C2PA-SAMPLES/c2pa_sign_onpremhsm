@@ -15,7 +15,7 @@
     <ItemGroup>
       <DataFiles Include="$(TargetDir)\*.*"/>
     </ItemGroup>
-    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(SolutionDir)\c2paSigner\c2pa\" SkipUnchangedFiles="true"/>
+    <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(SolutionDir)/../../c2paSigner/c2pa/" SkipUnchangedFiles="true"/>
   </Target>
 
 

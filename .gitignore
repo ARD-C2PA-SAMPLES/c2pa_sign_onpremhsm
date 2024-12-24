@@ -5,3 +5,6 @@
 c2paSigner/c2pa/hsm_signer.exe
 /c2paSigner/bin
 /.vs
+hsm_signer/.DS_Store
+/.vscode
+c2paSigner/.DS_Store
