@@ -31,7 +31,12 @@ namespace UImobile_c2paSigner;
 
         public string runSign(string outputFile)
         {
-            if (_filetoAnalyze != "")
+
+#if DEBUG
+        File.Copy(_filetoAnalyze,outputFile, true);
+        return "DEBUG";
+#endif
+        if (_filetoAnalyze != "")
             {
                 Process c2parunner3 = new Process();
 
@@ -41,10 +46,14 @@ namespace UImobile_c2paSigner;
                 }
                 catch{}
 
+                
+
+            try
+            {
                 c2parunner3.StartInfo.FileName = "c2patool";
 
                 //c2parunner3.StartInfo.Arguments = _filetoAnalyze + " -d";
-                c2parunner3.StartInfo.Arguments = "\""+ _filetoAnalyze + "\"" + " -m " + "\"" + Path.Combine(Directory.GetCurrentDirectory(),"certs/test_wdr2.json") + "\"" +  " --signer-path ./hsm_signer -f -o " + "\""  +  outputFile + "\"";
+                c2parunner3.StartInfo.Arguments = "\"" + _filetoAnalyze + "\"" + " -m " + "\"" + Path.Combine(Directory.GetCurrentDirectory(), "certs/test_wdr2.json") + "\"" + " --signer-path ./hsm_signer -f -o " + "\"" + outputFile + "\"";
                 Console.WriteLine("runC2PA 3 " + c2parunner3.StartInfo.Arguments);
                 c2parunner3.StartInfo.CreateNoWindow = true;
                 c2parunner3.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
@@ -53,7 +62,10 @@ namespace UImobile_c2paSigner;
                 c2parunner3.StartInfo.RedirectStandardOutput = true;
                 c2parunner3.Start();
 
-                if (!c2parunner3.WaitForExit(60 * 1000))
+            }
+            catch { }
+
+            if (!c2parunner3.WaitForExit(60 * 1000))
                 {
                     try
                     {

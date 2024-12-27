@@ -4,14 +4,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="UImobile_c2paSigner.MainWindow"
-        x:CompileBindings="False"
+        RequestedThemeVariant="Light"
+        Background="Green"
         Title="UImobile_c2paSigner" WindowState="Maximized" Topmost="true" SystemDecorations="None">
   <StackPanel>
-  <TextBlock Margin="20" xml:space="preserve" FontFamily="Consolas" HorizontalAlignment="Stretch" FontSize="50" TextAlignment="Center" Foreground="Black" Text="{Binding MessageUpdate}" />
+  <TextBlock Margin="20" xml:space="preserve" FontFamily="Consolas" HorizontalAlignment="Stretch" FontSize="50" TextAlignment="Center" Foreground="Black" Text="" Name="TextBlock1" />
   <Panel>
     <Rectangle Height="300" Width="300" Fill="LightGray"/>
     <Image Margin="20" Height="200" Width="200"
-           Source="{Binding ImageUpdate}"/>
+           Source="" Name="Image1"/>
   </Panel>
   </StackPanel>
 </Window>

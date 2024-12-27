@@ -13,56 +13,36 @@ using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 
 namespace UImobile_c2paSigner
 {
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        public new event PropertyChangedEventHandler? PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        string message;
-
-        Bitmap imageData;
-
-        static Thread t;
-
 
         //string PATHWATCH = "/Users/coadmin/Downloads/test/";
-        string PATHWATCH = "/media/";
+        //string PATHWATCH = "/media/";
+        string PATHWATCH = "Z:\\Documents\\GitHub\\c2pa_sign_onpremhsm";
 
         //string previous_message = "";
+        private void SetText(string text) => TextBlock1.Text = text;
 
-        public string MessageUpdate
-        {
-            get { return message; }
-            set { NotifyPropertyChanged(); }
-        }
-
-        public Bitmap ImageUpdate
-        {
-            get { return imageData; }
-            set { NotifyPropertyChanged(); }
-        }
+        private void SetImage(string source) => Image1.SetValue(Avalonia.Controls.Image.SourceProperty, new Bitmap(source));
+            
+        private void SetColor(string color) => this.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(color));
 
         public MainWindow()
         {
-            message = "";
-            imageData = new Bitmap("certs/wdr_icon.png");
+ 
             InitializeComponent();
-            Loaded += MainWindow_Loaded;    
+    
             DataContext = this;
-            
+
+
+            _ = Task.Run(() => UpdateGUI());
         }
 
-        private void MainWindow_Loaded(object sender, System.EventArgs e)
-        {
-            t = new Thread(new ThreadStart(async () => await UpdateGUI()));
-            t.Start();
-        }
+
 
         private async Task UpdateGUI()
         {
@@ -72,7 +52,7 @@ namespace UImobile_c2paSigner
                 Fs_watch(".MP4");
                 await Task.Delay(1000);
                 //inform - UI-change
-                inform("all done\r\nyou can remove card");
+                inform("all done\r\nyou can remove card", "green");
                 Console.WriteLine("check");
             }
         }
@@ -103,7 +83,7 @@ namespace UImobile_c2paSigner
                             }
 
                             //inform - html-change
-                            inform("do not eject\r\nsigning " + file.Name);
+                            inform("do not eject\r\nsigning " + file.Name,"red");
 
                             processC2PA runc2pa = new processC2PA(file.FullName);
                             runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
@@ -181,15 +161,11 @@ namespace UImobile_c2paSigner
             return "s";
         }
 
-        void inform(string msg)
+        void inform(string msg, string color)
         {
-            //Console.WriteLine(msg);
-            //if (msg == previous_message) return;
-            MessageUpdate = string.Empty;
-            ImageUpdate = new Bitmap("certs/wdr_icon.png");
-            imageData = new Bitmap("certs/wdr_icon.png");
-            message = msg;
-            //previous_message = msg;
+            Dispatcher.UIThread.Post(() => SetText(msg));
+            Dispatcher.UIThread.Post(() => SetImage(Path.Combine("certs","wdr_icon.png")));
+            Dispatcher.UIThread.Post(() => SetColor(color));
         }
 
 
