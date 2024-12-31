@@ -32,10 +32,6 @@ namespace UImobile_c2paSigner;
         public string runSign(string outputFile)
         {
 
-#if DEBUG
-        File.Copy(_filetoAnalyze,outputFile, true);
-        return "DEBUG";
-#endif
         if (_filetoAnalyze != "")
             {
                 Process c2parunner3 = new Process();
@@ -56,7 +52,7 @@ namespace UImobile_c2paSigner;
                 c2parunner3.StartInfo.Arguments = "\"" + _filetoAnalyze + "\"" + " -m " + "\"" + Path.Combine(Directory.GetCurrentDirectory(), "certs/test_wdr2.json") + "\"" + " --signer-path ./hsm_signer -f -o " + "\"" + outputFile + "\"";
                 Console.WriteLine("runC2PA 3 " + c2parunner3.StartInfo.Arguments);
                 c2parunner3.StartInfo.CreateNoWindow = true;
-                c2parunner3.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory();
+                c2parunner3.StartInfo.WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(),"c2pa");
                 c2parunner3.StartInfo.UseShellExecute = false;
                 c2parunner3.StartInfo.RedirectStandardError = true;
                 c2parunner3.StartInfo.RedirectStandardOutput = true;

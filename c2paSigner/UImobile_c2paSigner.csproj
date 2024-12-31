@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <DockerDefaultTargetOS>Linux_arm64</DockerDefaultTargetOS>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="c2pa\c2patool" />

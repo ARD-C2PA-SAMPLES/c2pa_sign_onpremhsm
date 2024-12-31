@@ -21,8 +21,8 @@ namespace UImobile_c2paSigner
     {
 
         //string PATHWATCH = "/Users/coadmin/Downloads/test/";
-        //string PATHWATCH = "/media/";
-        string PATHWATCH = "Z:\\Documents\\GitHub\\c2pa_sign_onpremhsm";
+        string PATHWATCH = "/media/";
+        //string PATHWATCH = "Z:\\Documents\\GitHub\\c2pa_sign_onpremhsm";
 
         //string previous_message = "";
         private void SetText(string text) => TextBlock1.Text = text;
@@ -67,7 +67,7 @@ namespace UImobile_c2paSigner
                 DirectoryInfo dirlist = new DirectoryInfo(PATHWATCH);
                 foreach (FileInfo file in dirlist.GetFiles("*" + extension, SearchOption.AllDirectories))
                 {
-                    if (!file.Name.Contains("_signed"))
+                    if ((!file.Name.Contains("_signed")) && (!Path.GetFileName(file.Name).StartsWith(".")))
                     {
                         if (!File.Exists(file.FullName.Replace(extension, "_signed" + extension)))
                         {
@@ -103,6 +103,7 @@ namespace UImobile_c2paSigner
 
         string resizeImage(string filename)
         {
+	    Console.WriteLine("resizing Image " + filename);
             using (SixLabors.ImageSharp.Image image = SixLabors.ImageSharp.Image.Load(filename))
             {
                 // Resize the image
