@@ -50,7 +50,7 @@ namespace UImobile_c2paSigner
             {
                 Fs_watch(".JPG");
                 Fs_watch(".MP4");
-                await Task.Delay(1000);
+                await Task.Delay(10000);
                 //inform - UI-change
                 inform("all done\r\nyou can remove card", "green");
                 Console.WriteLine("check");

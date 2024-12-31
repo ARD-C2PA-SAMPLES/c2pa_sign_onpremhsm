@@ -1,7 +1,6 @@
 {
     "alg": "es256",
     "sign_cert": "wdr_certs.pem",
-    "ta_url": "http://timestamp.digicert.com",
     "claim_generator": "IBC-Demo-Signer",
     "claim_generator_info": [
         {
