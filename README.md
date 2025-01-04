@@ -3,10 +3,13 @@
 This hardware setup offers the possibility to sign Images (JPG) and MP4-Files with given C2PA-Manifest.
 This can be preperation of production workflow to sign all content, that will be used in production workflow.
 
-(Image Production Workflow).
-
 Operation is easy. 
 Simply inject SD-Card to Reader and wait for Siging all content on SD-Card. Once finished you can remove SD-Card from Reader.
+
+![image](doc/ovw.jpg)
+
+The hardware can run autonomously from internet an power supply and sign all Images and Movies on SD-Card.
+The Certificate is saved securely on HSM-Device and can not be extracted.
 
 ## Installation HSM-Device
 1. YubiHSM-Shell
