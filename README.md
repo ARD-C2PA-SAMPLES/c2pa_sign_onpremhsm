@@ -1,5 +1,5 @@
 
-# c2pa onprem software on Raspberry PI with HSM-Device for Siging Images/MP4-Files
+# C2PA Onprem software on Raspberry PI with HSM-Device for Siging Images/MP4-Files
 This hardware setup offers the possibility to sign Images (JPG) and MP4-Files with given C2PA-Manifest.
 This can be preperation of production workflow to sign all content, that will be used in production workflow.
 
@@ -29,8 +29,22 @@ Run `sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0`
 
 ## Configuration HSM-Device
 1. Installation Private asymmetric Key
+(https://docs.yubico.com/hardware/yubihsm-2/hsm-2-user-guide/hsm2-cmd-reference.html#put-asymmetric-key-command)
+2. Run Signing with Yubi-HSM-Shell-Command
+(https://docs.yubico.com/hardware/yubihsm-2/hsm-2-user-guide/hsm2-quick-start.html#prepare-to-sign-with-the-new-asymmetric-key)
 
-2. Run Signing
+## Short Introduction in running OnPrem Signing with Yubikey HSM USB Device
+
+![system schema](doc/c2paSignOnPrem.drawio.png)
+
+1. Signer Backend Process continuously scans for new JPEG and MP4-Files on SD-Card.
+2. Once new File has found and if file is an Image, a thumbnail will be created and then
+3. used while signing with given manifest-definition
+To be signed claim-bytes will be sent to YubiHSM-Shell-Process<br>
+Have a look using parameter `signer-path` ref. https://github.com/contentauth/c2patool?tab=readme-ov-file#signing-claim-bytes-with-your-own-signer
+The signed claim bytes will be returned and manifest put into file.
+4. Yubi-HSM-Shell will be used by Signer Backend Process. Yubi-HSM-Shell communicates via internal TCP Connection with Yubi-Connector, that acts as a "Signing-Server" (so that also other Signer-Backend Process as e.g. Docker-Containers can connect to). Yubi-Connector communicates via USB with Yubi-HSM-Stick, containing private key.
+
 
 ## Hardware
 1. Raspberry Pi 4GByte (https://amzn.eu/d/dDLuCZQ)
