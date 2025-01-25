@@ -61,7 +61,7 @@ namespace UImobile_c2paSigner
         //*.JPG
         void Fs_watch(string extension)
         {
-
+            
             try
             {
                 DirectoryInfo dirlist = new DirectoryInfo(PATHWATCH);
@@ -85,11 +85,15 @@ namespace UImobile_c2paSigner
                             //inform - html-change
                             inform("do not eject\r\nsigning " + file.Name,"red");
 
+
                             processC2PA runc2pa = new processC2PA(file.FullName);
-                            runc2pa.runSign(file.FullName.Replace(extension, "_signed" + extension));
+                            runc2pa.runSign(file.FullName.Replace(extension, "_signing" + extension));
+                            File.Move(file.FullName.Replace(extension, "_signing" + extension), file.FullName.Replace(extension, "_signed" + extension));
+                            
+                            FileInfo filecheck = new FileInfo(file.FullName.Replace(extension, "_signed" + extension));
+                            Console.WriteLine("FileSize for " + filecheck.FullName + " is " + filecheck.Length);
 
                         }
-
                     }
 
                 }
